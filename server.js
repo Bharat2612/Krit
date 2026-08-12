@@ -20,6 +20,8 @@ require('./socket/socketHandler')(io);
 //   .then(() => console.log('MongoDB connected'))
 //   .catch(err => console.error('MongoDB error:', err));
 
+console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
+
 mongoose
   .connect(process.env.MONGO_URI, {
     serverSelectionTimeoutMS: 15000,
