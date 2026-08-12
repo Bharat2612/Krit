@@ -51,5 +51,15 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/groups', groupRoutes);
 app.set('io', io);
 
+// const PORT = process.env.PORT || 8500;
+// server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 const PORT = process.env.PORT || 8500;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+if (process.env.VERCEL !== "1") {
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
