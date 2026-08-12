@@ -16,9 +16,29 @@ const io = socketIo(server, { cors: { origin: '*' } });
 
 require('./socket/socketHandler')(io);
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB error:', err));
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => console.log('MongoDB connected'))
+//   .catch(err => console.error('MongoDB error:', err));
+
+mongoose
+  .connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 15000,
+    connectTimeoutMS: 15000,
+    family: 4,
+  })
+  .then(() => {
+    console.log("MongoDB connected");
+  })
+  .catch((err) => {
+    console.error("MongoDB error:", err.message);
+
+    if (err.reason?.servers) {
+      for (const [server, details] of err.reason.servers) {
+        console.error("MongoDB server:", server);
+        console.error("Server error:", details.error?.message);
+      }
+    }
+  });
 
 app.use(cors());
 app.use(express.json());
